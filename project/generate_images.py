@@ -410,7 +410,7 @@ def draw_histogram_panel(
     draw.text((x0 + 14, y0 + 34), "Ibr=max(R,G,B)  Ida=min(R,G,B)  Idi=Ibr-Ida", fill=(30, 37, 44), font=font)
 
     chart_x, chart_y = x0 + 18, y0 + 72
-    chart_w, chart_h = width - 36, 138
+    chart_w, chart_h = width - 36, 96
     draw.rectangle((chart_x, chart_y, chart_x + chart_w, chart_y + chart_h), outline=(80, 86, 92))
     max_count = max(float(hist.max()) for _name, hist, _color in histograms)
     for name, hist, color in histograms:
@@ -420,16 +420,16 @@ def draw_histogram_panel(
             py = chart_y + chart_h - int((float(count) / max_count) * (chart_h - 10))
             points.append((px, py))
         draw.line(points, fill=color, width=3)
-    legend_y = chart_y + chart_h + 10
+    legend_y = chart_y + chart_h + 8
     legend_x = chart_x
     for name, _hist, color in histograms:
         draw.rectangle((legend_x, legend_y + 3, legend_x + 14, legend_y + 15), fill=color)
         draw.text((legend_x + 20, legend_y), name, fill=(30, 37, 44), font=font)
         legend_x += 128
 
-    table_y = legend_y + 34
+    table_y = legend_y + 26
     draw.text((x0 + 14, table_y), "channel        mean     std      third moment   contrast", fill=(30, 37, 44), font=font)
-    table_y += 24
+    table_y += 18
     for name in ("brightness", "saturation", "darkness"):
         stats = features[name]
         line = (
@@ -437,7 +437,7 @@ def draw_histogram_panel(
             f"{stats['third']:+.4f}       {stats['contrast']:.3f}"
         )
         draw.text((x0 + 14, table_y), line, fill=(30, 37, 44), font=font)
-        table_y += 24
+        table_y += 18
 
 
 def naturalness_features(source: np.ndarray) -> np.ndarray:
@@ -464,9 +464,9 @@ def naturalness_features(source: np.ndarray) -> np.ndarray:
     draw = ImageDraw.Draw(canvas)
     panels = [
         ("Original generated image", source),
-        ("Brightness Ibr=max(R,G,B)", gray_to_rgb(brightness)),
+        ("Brightness Ibr=max RGB", gray_to_rgb(brightness)),
         ("HSV saturation channel", gray_to_rgb(saturation)),
-        ("Darkness Ida=min(R,G,B)", gray_to_rgb(darkness)),
+        ("Darkness Ida=min RGB", gray_to_rgb(darkness)),
         ("Difference Idi=Ibr-Ida", gray_to_rgb(difference)),
     ]
 
@@ -479,8 +479,8 @@ def naturalness_features(source: np.ndarray) -> np.ndarray:
 
     draw_histogram_panel(
         draw,
-        (tile_w + 16, tile_h * 2 + 38),
-        (tile_w - 32, tile_h - 54),
+        (tile_w + 16, tile_h * 2 + 12),
+        (tile_w - 32, tile_h - 28),
         histograms,
         features,
         font,

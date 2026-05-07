@@ -1,0 +1,88 @@
+Final Project: Image Classification System
+==========================================
+
+Pipeline:
+1. Image database assembly: 48 generated images, four classes, clean and noisy/degraded samples.
+2. Image restoration/enhancement: median denoising, Gaussian smoothing, unsharp masking, contrast stretching, and histogram equalization.
+3. Image segmentation: color-distance foreground thresholding, grayscale thresholding, morphological opening/closing, and largest connected object selection.
+4. Binary object extraction: selected enhanced image multiplied by the binary mask.
+5. Binary object features: horizontal and vertical projections.
+6. Concatenated feature vector: projections, Haralick texture, box-counting dimension, chain-code histogram, LBP histogram, RGB histograms, and intensity histogram.
+7. Classifier: scikit-learn SVM, SVC(kernel='rbf') inside a StandardScaler pipeline.
+
+Test accuracy: 100.00% (17/17)
+
+Confusion matrix (rows=actual, columns=predicted):
+actual/predicted,coin,leaf,car,traffic_sign
+coin,5,0,0,0
+leaf,0,4,0,0
+car,0,0,4,0
+traffic_sign,0,0,0,4
+
+Class-level precision/recall/F1:
+              precision    recall  f1-score   support
+
+        coin       1.00      1.00      1.00         5
+        leaf       1.00      1.00      1.00         4
+         car       1.00      1.00      1.00         4
+traffic_sign       1.00      1.00      1.00         4
+
+    accuracy                           1.00        17
+   macro avg       1.00      1.00      1.00        17
+weighted avg       1.00      1.00      1.00        17
+
+Per-image predictions:
+coin_clean_01.png: split=test, actual=coin, predicted=coin
+coin_clean_02.png: split=test, actual=coin, predicted=coin
+coin_clean_03.png: split=test, actual=coin, predicted=coin
+coin_clean_04.png: split=train, actual=coin, predicted=coin
+coin_clean_05.png: split=train, actual=coin, predicted=coin
+coin_clean_06.png: split=train, actual=coin, predicted=coin
+coin_noisy_07.png: split=train, actual=coin, predicted=coin
+coin_noisy_08.png: split=train, actual=coin, predicted=coin
+coin_noisy_09.png: split=train, actual=coin, predicted=coin
+coin_noisy_10.png: split=test, actual=coin, predicted=coin
+coin_noisy_11.png: split=test, actual=coin, predicted=coin
+coin_noisy_12.png: split=train, actual=coin, predicted=coin
+leaf_clean_01.png: split=test, actual=leaf, predicted=leaf
+leaf_clean_02.png: split=train, actual=leaf, predicted=leaf
+leaf_clean_03.png: split=train, actual=leaf, predicted=leaf
+leaf_clean_04.png: split=train, actual=leaf, predicted=leaf
+leaf_clean_05.png: split=test, actual=leaf, predicted=leaf
+leaf_clean_06.png: split=train, actual=leaf, predicted=leaf
+leaf_noisy_07.png: split=train, actual=leaf, predicted=leaf
+leaf_noisy_08.png: split=train, actual=leaf, predicted=leaf
+leaf_noisy_09.png: split=test, actual=leaf, predicted=leaf
+leaf_noisy_10.png: split=test, actual=leaf, predicted=leaf
+leaf_noisy_11.png: split=train, actual=leaf, predicted=leaf
+leaf_noisy_12.png: split=train, actual=leaf, predicted=leaf
+car_clean_01.png: split=train, actual=car, predicted=car
+car_clean_02.png: split=train, actual=car, predicted=car
+car_clean_03.png: split=test, actual=car, predicted=car
+car_clean_04.png: split=train, actual=car, predicted=car
+car_clean_05.png: split=test, actual=car, predicted=car
+car_clean_06.png: split=train, actual=car, predicted=car
+car_noisy_07.png: split=train, actual=car, predicted=car
+car_noisy_08.png: split=train, actual=car, predicted=car
+car_noisy_09.png: split=train, actual=car, predicted=car
+car_noisy_10.png: split=test, actual=car, predicted=car
+car_noisy_11.png: split=train, actual=car, predicted=car
+car_noisy_12.png: split=test, actual=car, predicted=car
+traffic_sign_clean_01.png: split=test, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_clean_02.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_clean_03.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_clean_04.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_clean_05.png: split=test, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_clean_06.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_noisy_07.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_noisy_08.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_noisy_09.png: split=test, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_noisy_10.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_noisy_11.png: split=train, actual=traffic_sign, predicted=traffic_sign
+traffic_sign_noisy_12.png: split=test, actual=traffic_sign, predicted=traffic_sign
+
+Performance discussion:
+The generated classes are intentionally separated by both shape and texture, so the concatenated vector gives the SVM multiple independent cues. Noisy images are restored before segmentation, which keeps binary masks stable enough for projections, box counting, and chain-code features.
+
+Potential improvements:
+For real images, the same system could be adapted by replacing the generated database with labeled folders, adding data augmentation, tuning SVM C/gamma by cross-validation, and using more robust segmentation for cluttered backgrounds.
