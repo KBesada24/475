@@ -1,0 +1,38 @@
+HW10 object recognition report
+================================
+
+Feature set:
+- Haralick contrast, energy, homogeneity, and correlation extracted from RGB-channel LBP images.
+- 16-bin grayscale LBP histogram.
+- Normalized object area.
+- Box-counting dimension of the segmented mask.
+- 8-direction chain-code histogram from the object boundary.
+
+Classifier: leave-one-out nearest centroid with z-score normalization.
+Accuracy: 1.000 (18/18)
+
+Confusion matrix (rows=actual, columns=predicted):
+actual/predicted,coin,leaf,car
+coin,6,0,0
+leaf,0,6,0
+car,0,0,6
+
+Per-image predictions:
+coin_01.png: actual=coin, predicted=coin
+coin_02.png: actual=coin, predicted=coin
+coin_03.png: actual=coin, predicted=coin
+coin_04.png: actual=coin, predicted=coin
+coin_05.png: actual=coin, predicted=coin
+coin_06.png: actual=coin, predicted=coin
+leaf_01.png: actual=leaf, predicted=leaf
+leaf_02.png: actual=leaf, predicted=leaf
+leaf_03.png: actual=leaf, predicted=leaf
+leaf_04.png: actual=leaf, predicted=leaf
+leaf_05.png: actual=leaf, predicted=leaf
+leaf_06.png: actual=leaf, predicted=leaf
+car_01.png: actual=car, predicted=car
+car_02.png: actual=car, predicted=car
+car_03.png: actual=car, predicted=car
+car_04.png: actual=car, predicted=car
+car_05.png: actual=car, predicted=car
+car_06.png: actual=car, predicted=car
